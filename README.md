@@ -1,1 +1,1 @@
-# otello_assistant
+# reversi_assistant
