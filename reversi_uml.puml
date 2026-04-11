@@ -1,0 +1,107 @@
+@startuml
+interface Ruleset {
+    + createStartBoard(size: Int): Board
+    + isValidMove(board: Board, move: Position, player: Player): Boolean
+    + applyMove(board: Board, move: Position, player: Player): Board
+    + isGameOver(board: Board): Boolean
+    + getWinner(board: Board): Player
+}
+
+abstract BaseReversiRules {
+    + isValidMove(board: Board, move: Position, player: Player): Boolean
+    + applyMove(board: Board, move: Position, player: Player): Board
+    + getValidMoves(board: Board, player: Player): List<Position>
+    + isGameOver(board: Board): Boolean
+    + getWinner(board: Board): Player
+}
+
+
+class OthelloRules {
+    + createStartBoard(8): Board
+}
+
+class NxNRules {
+    + createStartBoard(size: Int): Board
+}
+
+class StandardReversiRules {
+    + createStartBoard(8): Board
+}
+
+class AntiReversiRules {
+    + getWinner(board: Board): Player
+}
+
+
+
+class Game {
+    - gameId: String
+    - board: Board
+    - ruleset: Ruleset
+    - players: List<Player>
+    - currentPlayerIndex: Int
+    - moveHistory: List<Move>
+    + makeMove(playerId: String, row: Int, col: Int): MoveResult
+    - switchPlayer()
+}
+
+class Board {
+    - size: Int
+    - cells: Array<Array<Cell>>
+    + getCell(pos: Position): Cell
+    + setCell(pos: Position, cell: Cell): Unit
+    + createSnapshot(): BoardSnapshot
+}
+
+class BoardSnapshot {
+    - size: Int
+    - cells: Array<Array<Cell>>
+}
+
+class Player {
+    - id: String
+    - name: String
+    - elo: Int
+    - chipsCount: Int
+    + changeChipsCount(num: Int)
+    + changeElo()
+}
+
+class Position {
+    - row: Int
+    - col: Int
+    + isOnBoard(size: Int): Boolean
+}
+
+enum Cell {
+    EMPTY
+    BLACK
+    WHITE
+    + toPlayer(): Player
+}
+
+enum Player {
+    BLACK
+    WHITE
+}
+
+
+Ruleset <|.. BaseReversiRules
+BaseReversiRules <|-- OthelloRules
+BaseReversiRules <|-- NxNRules
+NxNRules <|-- StandardReversiRules
+NxNRules <|-- AntiReversiRules
+
+Game *-- Board : contains
+Game *-- Ruleset : contains
+Game *-- Player : contains
+
+Ruleset ..> Board : reads/modifies
+Ruleset ..> Position : uses
+Ruleset ..> Player : uses
+
+Board ..> BoardSnapshot : creates
+
+Board *-- Cell : contains
+
+@enduml
