@@ -1,11 +1,4 @@
 @startuml
-interface Ruleset {
-    + createStartBoard(size: Int): Board
-    + isValidMove(board: Board, move: Position, player: Player): Boolean
-    + applyMove(board: Board, move: Position, player: Player): Board
-    + isGameOver(board: Board): Boolean
-    + getWinner(board: Board): Player
-}
 
 abstract BaseReversiRules {
     + isValidMove(board: Board, move: Position, player: Player): Boolean
@@ -53,18 +46,12 @@ class Board {
     + createSnapshot(): BoardSnapshot
 }
 
-class BoardSnapshot {
-    - size: Int
-    - cells: Array<Array<Cell>>
-}
-
 class Player {
     - id: String
     - name: String
-    - elo: Int
     - chipsCount: Int
+    - color: ColorOfPlayer
     + changeChipsCount(num: Int)
-    + changeElo()
 }
 
 class Position {
@@ -75,33 +62,31 @@ class Position {
 
 enum Cell {
     EMPTY
-    BLACK
-    WHITE
-    + toPlayer(): Player
+    ColorOFOwner
+    + toPlayer(): ColorOfColor
 }
 
-enum Player {
+enum ColorOfPlayer {
     BLACK
     WHITE
 }
 
 
-Ruleset <|.. BaseReversiRules
+
 BaseReversiRules <|-- OthelloRules
 BaseReversiRules <|-- NxNRules
 NxNRules <|-- StandardReversiRules
 NxNRules <|-- AntiReversiRules
 
 Game *-- Board : contains
-Game *-- Ruleset : contains
+Game *-- BaseReversiRules : contains
 Game *-- Player : contains
 
-Ruleset ..> Board : reads/modifies
-Ruleset ..> Position : uses
-Ruleset ..> Player : uses
-
-Board ..> BoardSnapshot : creates
+Player *-- ColorOfPlayer: contains
+BaseReversiRules --> Board : reads/modifies
+BaseReversiRules --> Position : uses
+BaseReversiRules --> Player : uses
 
 Board *-- Cell : contains
-
+Cell *-- ColorOfPlayer: uses
 @enduml
