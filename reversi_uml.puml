@@ -10,15 +10,13 @@ abstract BaseReversiRules {
 
 
 class OthelloRules {
-    + createStartBoard(8): Board
+    + isGameOver(board: Board): Boolean
 }
 
 class NxNRules {
-    + createStartBoard(size: Int): Board
-}
-
-class StandardReversiRules {
-    + createStartBoard(8): Board
+    + NxNRules(size: Int)
+    + getBoardSize(): Int
+    + createStartBoard(): Board
 }
 
 class AntiReversiRules {
@@ -30,7 +28,7 @@ class AntiReversiRules {
 class Game {
     - gameId: String
     - board: Board
-    - ruleset: Ruleset
+    - ruleset: BaseReversiRules
     - players: List<Player>
     - currentPlayerIndex: Int
     - moveHistory: List<Move>
@@ -49,6 +47,7 @@ class Board {
 class Player {
     - id: String
     - name: String
+    - elo: Int
     - chipsCount: Int
     - color: ColorOfPlayer
     + changeChipsCount(num: Int)
@@ -62,8 +61,8 @@ class Position {
 
 enum Cell {
     EMPTY
-    ColorOFOwner
-    + toPlayer(): ColorOfColor
+    PlayerOne
+    PlayerTwo
 }
 
 enum ColorOfPlayer {
@@ -75,18 +74,16 @@ enum ColorOfPlayer {
 
 BaseReversiRules <|-- OthelloRules
 BaseReversiRules <|-- NxNRules
-NxNRules <|-- StandardReversiRules
 NxNRules <|-- AntiReversiRules
 
 Game *-- Board : contains
 Game *-- BaseReversiRules : contains
 Game *-- Player : contains
 
-Player *-- ColorOfPlayer: contains
+Player --> ColorOfPlayer: has
 BaseReversiRules --> Board : reads/modifies
 BaseReversiRules --> Position : uses
 BaseReversiRules --> Player : uses
 
 Board *-- Cell : contains
-Cell *-- ColorOfPlayer: uses
 @enduml
