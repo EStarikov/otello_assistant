@@ -1,0 +1,88 @@
+@startuml
+
+abstract BaseReversiRules {
+    + isValidMove(board: Board, move: Position, player: Player): Boolean
+    + applyMove(board: Board, move: Position, player: Player): Board
+    + getValidMoves(board: Board, player: Player): List<Position>
+    + isGameOver(board: Board): Boolean
+    + getWinner(board: Board): Player
+}
+
+
+class OthelloRules {
+    + isGameOver(board: Board): Boolean
+}
+
+class NxNRules {
+    + getBoardSize(): Int
+    + createStartBoard(): Board
+}
+
+class AntiReversiRules {
+    + getWinner(board: Board): Player
+}
+
+
+
+class Game {
+    - gameId: String
+    - board: Board
+    - ruleset: BaseReversiRules
+    - players: List<Player>
+    - currentPlayerIndex: Int
+    - moveHistory: List<Move>
+    + makeMove(playerId: String, row: Int, col: Int): MoveResult
+    - switchPlayer()
+}
+
+class Board {
+    - size: Int
+    - cells: Array<Array<Cell>>
+    + getCell(pos: Position): Cell
+    + setCell(pos: Position, cell: Cell): Unit
+    + createSnapshot(): BoardSnapshot
+}
+
+class Player {
+    - id: String
+    - name: String
+    - elo: Int
+    - chipsCount: Int
+    - color: ColorOfPlayer
+    + changeChipsCount(num: Int)
+}
+
+class Position {
+    - row: Int
+    - col: Int
+    + isOnBoard(size: Int): Boolean
+}
+
+enum Cell {
+    EMPTY
+    PlayerOne
+    PlayerTwo
+}
+
+enum ColorOfPlayer {
+    BLACK
+    WHITE
+}
+
+
+
+BaseReversiRules <|-- OthelloRules
+BaseReversiRules <|-- NxNRules
+NxNRules <|-- AntiReversiRules
+
+Game *-- Board : contains
+Game *-- BaseReversiRules : contains
+Game *-- Player : contains
+
+Player --> ColorOfPlayer: has
+BaseReversiRules --> Board : reads/modifies
+BaseReversiRules --> Position : uses
+BaseReversiRules --> Player : uses
+
+Board *-- Cell : contains
+@enduml
