@@ -189,8 +189,7 @@ class SimpleGameIntegrationTest {
         )
 
         for (move in moves) {
-            assertTrue(rulesOfThisGame.isValidMove(cleanBoard, move, cleanGame.getCurrentPlayer()))
-            cleanGame.makeMove(move)
+            assertTrue(cleanGame.makeMove(move))
         }
 
         assertTrue(cleanGame.isGameOver())
