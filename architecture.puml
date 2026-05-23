@@ -1,0 +1,44 @@
+@startuml
+!theme mimeograph
+
+package Database {
+class EntityGames
+class EntityPlayers
+class GenericRepository
+class PlayersRepo
+class GamesRepo
+}
+
+package GUI {
+class GameFrame
+class GuiReversi
+class PlayerInput
+}
+
+EntityGames <--> Game
+EntityPlayers <--> Player
+
+GenericRepository --> EntityGames : has
+GenericRepository --> EntityPlayers : has
+
+GenericRepository <|.. PlayersRepo : <<bind>> <<T->Player>>
+GenericRepository <|.. GamesRepo : <<bind>> <<T->Game>>
+
+GameFrame --> Game : has
+GameFrame --> GuiReversi : uses
+GameFrame --> PlayerInput : uses
+
+NxNReversiRules <|-- OthelloRules
+NxNReversiRules <|-- AntiReversiRules
+
+Game *-- Board : contains
+Game *-- NxNReversiRules: contains
+Game *-- Player : contains
+
+Player --> ColorOfPlayer: has
+NxNReversiRules --> Board : reads/modifies
+NxNReversiRules --> Position : uses
+NxNReversiRules --> Player : uses
+
+Board *-- Cell : contains
+@enduml
