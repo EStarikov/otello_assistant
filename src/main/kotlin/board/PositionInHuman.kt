@@ -1,3 +1,5 @@
+package board
+
 class PositionInHuman {
     fun makeHuman(position: Position): String {
         val humanRow = position.row + 1

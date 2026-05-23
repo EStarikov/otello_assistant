@@ -1,6 +1,9 @@
+package player
+
+import board.Cell
 import java.time.LocalDateTime
 
-class Player(private val name: String, private val elo: Int = 1000, registeredAt: LocalDateTime = LocalDateTime.now()) {
+class Player(private val name: String, private val elo: Double = 1000.0, registeredAt: LocalDateTime = LocalDateTime.now()) {
     private var color: ColorOfPlayer? = null
     fun setColor(color: ColorOfPlayer) {this.color = color }
     fun getColor(): Cell {
@@ -12,5 +15,5 @@ class Player(private val name: String, private val elo: Int = 1000, registeredAt
         return Cell.PLAYER_ONE
     }
     fun getName(): String {return name}
-    fun getElo(): Int {return elo}
+    fun getElo(): Double {return elo}
 }

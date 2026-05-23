@@ -1,8 +1,9 @@
 package rules
 
-import Board
-import Position
-import Player
+import board.Board
+import board.Cell
+import board.Position
+import player.Player
 
 open class NxNReversiRules{
     open fun createStartBoard(size: Int = 8, positions: Array<Pair<Position, Int>> = arrayOf(Pair(Position(0, 0), 1))): Board {

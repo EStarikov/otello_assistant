@@ -1,9 +1,11 @@
+package database
+
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 
-object DataBaseFactory {
+object DatabaseFactory {
     private const val DB_FILE = "reversi.db"
 
     fun init() {
@@ -28,7 +30,6 @@ object DataBaseFactory {
         transaction {
             SchemaUtils.drop(Players, Games)
             SchemaUtils.create(Players, Games)
-            println("🗑️ Все данные удалены, таблицы пересозданы")
         }
     }
 }

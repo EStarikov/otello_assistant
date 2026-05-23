@@ -1,9 +1,9 @@
 package rules
 
-import Board
-import Cell
-import Player
-import Position
+import board.Board
+import board.Cell
+import board.Position
+import player.Player
 
 class OthelloRules: NxNReversiRules() {
     override fun createStartBoard(size: Int, positions: Array<Pair<Position, Int>>): Board {
